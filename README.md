@@ -53,7 +53,7 @@ baseball-stats-app
 1. Clone the repository:
 
    ```
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/dataganster/baseball-player-stats)
    cd baseball-stats-app
    ```
 
