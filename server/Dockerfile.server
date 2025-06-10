@@ -1,0 +1,21 @@
+FROM node:18
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+
+# Example Dockerfile snippet
+RUN npm install -g ts-node 
+RUN npm install -g typescript
+
+COPY . .
+
+RUN chmod +x entrypoint.sh
+
+EXPOSE 5000
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+CMD ["npx", "ts-node", "./src/app.ts"]

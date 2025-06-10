@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPlayers, getPlayerById, updatePlayer } from '../controllers/playerController';
+import { getPlayers, getPlayerByIdController, updatePlayerController} from '../controllers/playerController';
 
 const router = express.Router();
 
@@ -7,9 +7,9 @@ const router = express.Router();
 router.get('/', getPlayers);
 
 // Route to get a player by ID
-router.get('/:id', getPlayerById);
+router.get('/:id', getPlayerByIdController);
 
 // Route to update a player's data
-router.put('/:id', updatePlayer);
+router.put('/:id', updatePlayerController);
 
 export default router;

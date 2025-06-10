@@ -1,5 +1,13 @@
 import { Pool } from 'pg';
-import { Player } from '../types/player';
+
+// Define Player type locally if not available from shared types
+export type Player = {
+    id?: number;
+    name: string;
+    hits: number;
+    homeRuns: number;
+    description: string;
+};
 
 const pool = new Pool({
     user: 'your_username',
@@ -9,12 +17,12 @@ const pool = new Pool({
     port: 5432,
 });
 
-export const getPlayers = async (): Promise<Player[]> => {
+export const getPlayersModel = async (): Promise<Player[]> => {
     const result = await pool.query('SELECT * FROM players');
     return result.rows;
 };
 
-export const getPlayerById = async (id: number): Promise<Player | null> => {
+export const getPlayerById = async (id: string): Promise<Player | null> => {
     const result = await pool.query('SELECT * FROM players WHERE id = $1', [id]);
     return result.rows.length ? result.rows[0] : null;
 };
@@ -27,7 +35,7 @@ export const createPlayer = async (player: Player): Promise<Player> => {
     return result.rows[0];
 };
 
-export const updatePlayer = async (id: number, player: Player): Promise<Player | null> => {
+export const updatePlayer = async (id: string, player: Player): Promise<Player | null> => {
     const result = await pool.query(
         'UPDATE players SET name = $1, hits = $2, homeRuns = $3, description = $4 WHERE id = $5 RETURNING *',
         [player.name, player.hits, player.homeRuns, player.description, id]

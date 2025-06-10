@@ -32,7 +32,8 @@ baseball-stats-app
 │   ├── package.json       # Server package metadata
 │   └── tsconfig.json      # TypeScript configuration for server
 ├── database               # Database schema
-│   └── schema.sql
+│   ├── schema.sql
+│   └── initdb.d           # Initialization scripts for Docker
 ├── docker-compose.yml     # Docker Compose configuration
 ├── Dockerfile.client       # Dockerfile for client
 ├── Dockerfile.server       # Dockerfile for server
@@ -61,6 +62,10 @@ baseball-stats-app
 
    - Create a PostgreSQL database and user.
    - Run the SQL schema in `database/schema.sql` to set up the necessary tables.
+   ```
+   npm install pg
+   ```
+   - If using Docker, place your schema or initialization scripts in `database/initdb.d/` so they are run automatically.
 
 3. Install dependencies for the server:
 

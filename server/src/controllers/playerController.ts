@@ -1,7 +1,25 @@
 import { Request, Response } from 'express';
-import { getPlayerById, updatePlayer } from '../models/playerModel';
+import { error } from 'console';
+import { getPlayersModel as getPlayersModel, getPlayerById, updatePlayer } from '../models/playerModel';
 
-export const fetchPlayerDetails = async (req: Request, res: Response) => {
+// Get all players
+export const getPlayers = async (req: Request, res: Response) => {
+    try {
+        const players = await getPlayersModel();
+        res.json(players);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error fetching players:', message);
+        // Log the error to a logging service or console
+        // You can also implement a logging service to capture this error
+        // For example: loggingService.logError('Error fetching players', error);
+        // Respond with a 500 status code and the error message
+        res.status(500).json({ message: 'Error fetching players', error: message });
+    }
+};
+
+// Get player by ID
+export const getPlayerByIdController = async (req: Request, res: Response) => {
     const playerId = req.params.id;
     try {
         const player = await getPlayerById(playerId);
@@ -10,11 +28,18 @@ export const fetchPlayerDetails = async (req: Request, res: Response) => {
         }
         res.json(player);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching player details', error: error.message });
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error fetching player details:', message);
+        // Log the error to a logging service or console
+        // You can also implement a logging service to capture this error
+        // For example: loggingService.logError('Error fetching player details', error);
+        // Respond with a 500 status code and the error message
+        res.status(500).json({ message: 'Error fetching player details', error: message });
     }
 };
 
-export const editPlayerData = async (req: Request, res: Response) => {
+// Update player data
+export const updatePlayerController = async (req: Request, res: Response) => {
     const playerId = req.params.id;
     const playerData = req.body;
     try {
@@ -24,6 +49,12 @@ export const editPlayerData = async (req: Request, res: Response) => {
         }
         res.json(updatedPlayer);
     } catch (error) {
-        res.status(500).json({ message: 'Error updating player data', error: error.message });
+        const message = error instanceof Error ? error.message : 'Unknown error';  
+        console.error('Error updating player data:', message);
+        // Log the error to a logging service or console
+        // You can also implement a logging service to capture this error
+        // For example: loggingService.logError('Error updating player data', error);
+        // Respond with a 500 status code and the error message 
+        res.status(500).json({ message: 'Error updating player data', error: message });
     }
 };

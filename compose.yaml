@@ -1,0 +1,41 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.server
+    ports:
+      - "5001:5000"
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/baseball
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=baseball
+    healthcheck:
+      test: ["CMD-SHELL", "psql -h local -U postgres"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      - db
+    command: /bin/sh -c "npm run import-data && npm run start"
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: baseball
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/initdb.d:/docker-entrypoint-initdb.d
